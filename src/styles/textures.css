@@ -1,0 +1,87 @@
+/* ==========================================================================
+   PAST FORMAT — newsprint textures
+   Deliberately faint: they should only read in large empty areas.
+   ========================================================================== */
+
+@layer components {
+  /* 4x4 dot grid — primary page texture */
+  .newsprint-dots {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Crect width='1' height='1' fill='%23111111' fill-opacity='0.13'/%3E%3C/svg%3E");
+    background-size: 4px 4px;
+  }
+
+  /* Fine ruled grid — used behind large editorial voids */
+  .newsprint-texture {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M28 0H0v28' fill='none' stroke='%23111111' stroke-opacity='0.07' stroke-width='1'/%3E%3C/svg%3E");
+    background-size: 28px 28px;
+  }
+
+  /* Diagonal hatch — inverted / black areas */
+  .newsprint-hatch {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6' viewBox='0 0 6 6'%3E%3Cpath d='M0 6L6 0' stroke='%23F9F9F7' stroke-opacity='0.16' stroke-width='1'/%3E%3C/svg%3E");
+    background-size: 6px 6px;
+  }
+
+  /* Vertical column rules for the 12-col editorial grid */
+  .grid-rules {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='8' viewBox='0 0 2 8'%3E%3Crect width='1' height='4' fill='%23111111' fill-opacity='0.16'/%3E%3C/svg%3E");
+    background-repeat: repeat-y;
+    background-size: 1px 8px;
+  }
+
+  /* ==========================================================================
+     Image treatment — single source of truth.
+     Change these two rules to alter the entire site's photographic look.
+     ========================================================================== */
+
+  .media-frame {
+    overflow: hidden;
+    background-color: var(--color-muted);
+    position: relative;
+  }
+
+  .media-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.04);
+    transform: scale(1);
+    transition:
+      filter 300ms var(--ease-mech),
+      transform 300ms var(--ease-mech);
+  }
+
+  .group:hover .media-img,
+  .group:focus-visible .media-img,
+  .media-frame:hover > .media-img {
+    filter: grayscale(0%) sepia(0.14) contrast(1.02);
+    transform: scale(1.05);
+  }
+
+  /* Opt-out: keep an image in colour permanently */
+  .media-img--color {
+    filter: none;
+  }
+
+  .group:hover .media-img--color {
+    filter: sepia(0.1);
+  }
+
+  /* Always-mono variant (lightbox, founder plate) */
+  .media-img--mono {
+    filter: grayscale(100%) contrast(1.05);
+    transform: none;
+  }
+
+  .group:hover .media-img--mono {
+    filter: grayscale(100%) contrast(1.05);
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .media-img,
+    .group:hover .media-img {
+      transform: none !important;
+    }
+  }
+}

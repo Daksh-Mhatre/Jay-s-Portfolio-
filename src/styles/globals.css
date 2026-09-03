@@ -1,0 +1,214 @@
+/* ==========================================================================
+   PAST FORMAT — Newsprint design system : tokens + base
+   ========================================================================== */
+
+@theme {
+  /* Palette ------------------------------------------------------------- */
+  --color-paper: #f9f9f7;
+  --color-ink: #111111;
+  --color-muted: #e5e5e0;
+  --color-accent: #cc0000;
+  --color-grey-500: #737373;
+  --color-grey-600: #525252;
+  --color-grey-700: #404040;
+
+  /* Type ---------------------------------------------------------------- */
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+  --font-body: "Lora", ui-serif, Georgia, serif;
+  --font-ui: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Geometry: no radius anywhere in this identity ----------------------- */
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-4xl: 0px;
+
+  /* Motion -------------------------------------------------------------- */
+  --ease-mech: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-ink);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-ui);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  img,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Editorial scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-muted);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink);
+  }
+}
+
+/* ==========================================================================
+   Motion primitives — fast, mechanical, intentional
+   ========================================================================== */
+
+@keyframes pf-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.pf-marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: pf-marquee var(--pf-marquee-duration, 34s) linear infinite;
+}
+
+.pf-marquee-track[data-direction="reverse"] {
+  animation-direction: reverse;
+}
+
+.pf-reveal {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition:
+    opacity 400ms var(--ease-mech),
+    transform 400ms var(--ease-mech);
+}
+
+.pf-reveal[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes pf-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pf-slide-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.pf-anim-fade {
+  animation: pf-fade-in 200ms var(--ease-mech) both;
+}
+
+.pf-anim-slide {
+  animation: pf-slide-up 260ms var(--ease-mech) both;
+}
+
+/* ==========================================================================
+   Hard shadow (never soft)
+   ========================================================================== */
+
+.hard-shadow {
+  box-shadow: 4px 4px 0 var(--color-ink);
+}
+
+.hard-shadow-invert {
+  box-shadow: 4px 4px 0 var(--color-paper);
+}
+
+.hard-shadow-accent {
+  box-shadow: 4px 4px 0 var(--color-accent);
+}
+
+.hover-hard {
+  transition:
+    transform 200ms var(--ease-mech),
+    box-shadow 200ms var(--ease-mech),
+    background-color 200ms var(--ease-mech),
+    color 200ms var(--ease-mech);
+}
+
+.hover-hard:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--color-ink);
+}
+
+/* ==========================================================================
+   Reduced motion — everything stills
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .pf-marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .pf-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .pf-anim-fade,
+  .pf-anim-slide {
+    animation: none !important;
+  }
+
+  .hover-hard:hover {
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
